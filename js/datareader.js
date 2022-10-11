@@ -1,4 +1,4 @@
-var files=[ "./geoid/corgeoid.txt", "./geoid/EGM0825min2.txt","./geoid/ascii _raster_file/WGM20212Last.asc", "./geoid/ascii _raster_file/ascigrid.asc"];
+var files=[ "./geoid/ascii _raster_file/corgeo.asc", "./geoid/EGM0825min2.txt","./geoid/ascii _raster_file/WGM20212Last.asc", "./geoid/ascii _raster_file/ascigrid.asc","/geoid/ascii _raster_file/srtmlast11.asc"];
 
 
 var datacor=[];
@@ -16,10 +16,22 @@ var addressPoints=[];
 var intensity=[];
 var xgrid=[];
 var ygrid=[];
+
+var xgrid2=[];
+var ygrid2=[];
+
+var xgrid3=[];
+var ygrid3=[];
+
+var xgrid4=[];
+var ygrid4=[];
+
 var xgridl=[];
 var ygridl=[];
 var heatmapLayer2;
 var heatmapLayer3; 
+var heatmapLayer4;
+var heatmapLayer5;
 
     var reader  = new XMLHttpRequest()|| new ActiveXObject('MSXML2.XMLHTTP');
     var datacorr=[];
@@ -42,30 +54,14 @@ function storedata (){
    
           
            //READ Correction DATA
-           datacor=null;
+           datacor=[];
+           datacorr=[];
            datacorr=reader.responseText.split("\n");
 
            datacor=datacorr;
 
 
-           if(i==0){
-
-         
-  for(let j=0; j<=datacor.length-3;j++)
-  {
-    sp = [];
-    tosplit = String(datacor[j+1]); 
-    sp = tosplit.split("\t");
-
-    locName[j]=sp[0];
-    Longcor[j] = parseFloat(sp[2]);
-    Latcor[j] = parseFloat(sp[1]);
-      Cor[j] =parseFloat(sp[3]);
-
-  }
-
-}
-
+          
 if(i==1){
 
 
@@ -111,12 +107,18 @@ if(i==1){
 
 
 //////////////griding/////////////////////////////////////////////////
-if(i==3 || i==2){
+if(i==3 || i==2|| i==4 ||i==0){
+  intensity=[];
+
+
+
+  
 
   /////////////load intensity
   for(let j=6; j<=datacor.length-3;j++)
   {
     sp = [];
+    tosplit=[];
     tosplit = String(datacor[j]); 
    
 
@@ -143,7 +145,6 @@ if(i==3 || i==2){
     
   }
 
-  console.log(intensity);
 
   //////genrate coordinate drid
   var s=0;
@@ -154,6 +155,55 @@ if(i==3 || i==2){
   var orglong;
   var orglat;
 
+
+  if(i==0){
+
+    /////COR GEO 
+    paslong=0.0991909 ;
+    paslat=0.09944730;
+  
+    orglong=42.0767;
+    orglat=10.2638;
+    s=0;
+
+
+    for(let j=0; j<=200;j++){
+      ygridl=[];
+      xgridl=[];
+      
+      for(let i=0; i<=200;i++)
+      {
+        /*xgridl[i]=42.3958 +0.4861111*(i);
+        
+        ygridl[i]=(-1)*11.4375+(-0.497311)*s;*/
+  
+  
+        xgridl[i]=orglong +paslong*(i);
+        
+        ygridl[i]=(-1)*orglat+(-paslat)*s;
+       
+      }
+      s=s+1;
+  
+      ygrid4.push(ygridl);
+  
+      xgrid4.push(xgridl);
+  
+  
+  }
+
+  var data=[];
+ data= {
+  x: xgrid4,
+  y: ygrid4,
+  z: intensity,
+  };
+
+
+}
+
+
+
   if(i==2){
 
   paslong=0.1000000 ;
@@ -161,25 +211,13 @@ if(i==3 || i==2){
 
   orglong=40.0000000;
   orglat=8.00000;
-  }
+  //console.log("WGM"+intensity);
 
-
-  if(i==3){
-
-    paslong=0.04166 ;
-    paslat=0.04166;
-  
-    orglong=42.3958;
-    orglat=11.4375;
-    }
-
- 
-
-  for(let j=0; j<=500;j++){
+  for(let j=0; j<=2568;j++){
     ygridl=[];
     xgridl=[];
     
-    for(let i=0; i<=500;i++)
+    for(let i=0; i<=550;i++)
     {
       /*xgridl[i]=42.3958 +0.4861111*(i);
       
@@ -197,15 +235,120 @@ if(i==3 || i==2){
 
     xgrid.push(xgridl);
 
- 
+
 }
 
-//////Data
-const data= {
+var data=[];
+ data= {
   x: xgrid,
   y: ygrid,
   z: intensity,
   };
+  //console.log(intensity);
+
+  }
+
+
+  if(i==3){
+    
+  
+    paslong=0.04166 ;
+    paslat=0.04166;
+  
+    orglong=42.3958;
+    orglat=11.4375;
+    s=0;
+
+
+    for(let j=0; j<=500;j++){
+      ygridl=[];
+      xgridl=[];
+      
+      for(let i=0; i<=500;i++)
+      {
+        /*xgridl[i]=42.3958 +0.4861111*(i);
+        
+        ygridl[i]=(-1)*11.4375+(-0.497311)*s;*/
+  
+  
+        xgridl[i]=orglong +paslong*(i);
+        
+        ygridl[i]=(-1)*orglat+(-paslat)*s;
+       
+      }
+      s=s+1;
+  
+      ygrid2.push(ygridl);
+  
+      xgrid2.push(xgridl);
+  
+  
+  }
+
+  var data=[];
+ data= {
+  x: xgrid2,
+  y: ygrid2,
+  z: intensity,
+  };
+
+    }
+
+
+    ///SRTM DATA
+    
+  if(i==4){
+    
+  
+    paslong=0.00999999 ;
+    paslat=0.00999803110;
+  
+    orglong=41.6596;
+    orglat=10.04458334;
+    s=0;
+
+
+    for(let j=0; j<=1700;j++){
+      ygridl=[];
+      xgridl=[];
+      
+      for(let i=0; i<=1200;i++)
+      {
+        /*xgridl[i]=42.3958 +0.4861111*(i);
+        
+        ygridl[i]=(-1)*11.4375+(-0.497311)*s;*/
+  
+  
+        xgridl[i]=orglong +paslong*(i);
+        
+        ygridl[i]=(-1)*orglat+(-paslat)*s;
+       
+      }
+      s=s+1;
+  
+      ygrid3.push(ygridl);
+  
+      xgrid3.push(xgridl);
+  
+  
+  }
+
+  var data=[];
+ data= {
+  x: xgrid3,
+  y: ygrid3,
+  z: intensity,
+  };
+
+  console.log(intensity);
+
+    }
+
+ 
+
+ 
+
+//////Data
 
 
 
@@ -397,15 +540,45 @@ const data= {
 
 
   //////Layer variable
-  if(i==2){
+  if(i==0){
+    ////CORGeo
+        heatmapLayer5= L.contour(data, {
+          thresholds:100,
+          style: (feature) => {
+            return {
+              color: getColor(feature.geometry.value,-3,1.4, colors),
+              opacity: 0.05,
+              fillOpacity: 0.05,
+            };
+          },
+          onEachFeature: onEachContour(),
+        });
+      
+        function onEachContour() {
+          return function onEachFeature(feature, layer) {
+            //console.log(feature.value);
+        
+            layer.bindPopup(
+              `<table><tbody><tr><td>${feature.value} m </td></tr></tbody></table>`
+            );
+          };
+      
+        }
+    
+      }
 
-    heatmapLayer2= L.contour(data, {
+
+
+
+  if(i==2){
+////BOuguer WGM 2012
+    heatmapLayer3= L.contour(data, {
       thresholds:200,
       style: (feature) => {
         return {
-          color: getColor(feature.geometry.value, -31,11, colors),
-          opacity: 0.04,
-          fillOpacity: 0.01,
+          color: getColor(feature.geometry.value,150,200, colors),
+          opacity: 0.05,
+          fillOpacity: 0.06,
         };
       },
       onEachFeature: onEachContour(),
@@ -416,7 +589,7 @@ const data= {
         //console.log(feature.value);
     
         layer.bindPopup(
-          `<table><tbody><tr><td>${feature.value} m</td></tr></tbody></table>`
+          `<table><tbody><tr><td>${feature.value} mgal </td></tr></tbody></table>`
         );
       };
   
@@ -425,14 +598,14 @@ const data= {
   }
 
   if(i==3){
-
-  heatmapLayer3= L.contour(data, {
-    thresholds:200,
+// GEOID EGM2008
+  heatmapLayer2= L.contour(data, {
+    thresholds:100,
     style: (feature) => {
       return {
-        color: getColor(feature.geometry.value, -31,11, colors),
-        opacity: 0.04,
-        fillOpacity: 0.01,
+        color: getColor(feature.geometry.value,-31,11, colors),
+        opacity: 0.2,
+        fillOpacity: 0.04,
       };
     },
     onEachFeature: onEachContour(),
@@ -450,6 +623,33 @@ const data= {
   }
 
 }
+
+if(i==4){
+  // SRTM
+    heatmapLayer4= L.contour(data, {
+      thresholds:100,
+      style: (feature) => {
+        return {
+          color: getColor(feature.geometry.value,-1,2418, colors),
+          opacity: 0.2,
+          fillOpacity: 0.1,
+        };
+      },
+      onEachFeature: onEachContour(),
+    });
+  
+    function onEachContour() {
+      return function onEachFeature(feature, layer) {
+        //console.log(feature.value);
+    
+        layer.bindPopup(
+          `<table><tbody><tr><td>${feature.value} m</td></tr></tbody></table>`
+        );
+      };
+  
+    }
+  
+  }
 
 
 
@@ -488,7 +688,7 @@ for(let f=0; f<=datacor.length-3; f++){
         data: Datab
       };
 
-      if (i<=3){
+      if (i<=4){
           i=i+1;
         loadcor();
 

@@ -312,15 +312,15 @@ attribution: mbAttr
       /*var heatmapLayer2 = new HeatmapOverlay(cfg2);
        heatmapLayer2.setData(testData[1]);*/
 
-       console.log(heatmapLayer2);
+       console.log("itooooooooo"+heatmapLayer5);
 
 
 
 
 
 
-      var heatmapLayer = new HeatmapOverlay(cfg);
-      heatmapLayer.setData(testData[0]);
+      /*var heatmapLayer = new HeatmapOverlay(cfg);
+      heatmapLayer.setData(testData[0]);*/
 
 
 
@@ -329,13 +329,13 @@ attribution: mbAttr
       var map = new L.Map('map', {
         center: new L.LatLng(-19.5, 44),
         zoom: 6,
-        layers: [baseLayer, heatmapLayer2  ]
+        layers: [baseLayer, heatmapLayer5  ]
       });
 
 
-             ///show value
+             ///show value on moussmove
 
-    var command3 = L.control({position: 'topleft'});
+ /*   var command3 = L.control({position: 'topleft'});
 
     command3.onAdd = function (map) {
     var div = L.DomUtil.create('div');
@@ -346,6 +346,8 @@ attribution: mbAttr
 };
 command3.addTo(map);
 
+
+
 var tooltip = document.querySelector('#tooltip');
 
 function updateTooltip(x, y, display_val) {
@@ -354,6 +356,7 @@ function updateTooltip(x, y, display_val) {
   tooltip.style.webkitTransform = transl;
   tooltip.innerHTML = display_val;
 };
+
 
 
 
@@ -381,12 +384,12 @@ console.log(display_val);
 };
 
 
-
+*/
      
   
 
       // make accessible for debugging
-      layer = heatmapLayer;
+    
 
 
 
@@ -467,10 +470,11 @@ console.log(display_val);
             label: 'Public Data',
             selectAllCheckbox: 'Un/select all',
             children: [
-                {label: '<div id="onlysel">-Show only selected-</div>'},
-                {label: 'Correction Applied to EGM2008', layer:heatmapLayer },
+                {label: '<div id="onlysel"></div>'},
+                {label: 'Correction Applied to EGM2008', layer:heatmapLayer5 },
                 {label: 'EGM2008', layer:heatmapLayer2 },
                 {label: 'Word Gravimetric Model WGM2012', layer:heatmapLayer3 }, 
+                {label: 'Shuttle Radar Topography SRTM ', layer: heatmapLayer4 }, 
                 
             ]
         },

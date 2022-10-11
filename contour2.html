@@ -12,6 +12,9 @@
       integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
       crossorigin=""
     />
+
+    <link   rel="stylesheet" href= "css/L.Control.Range"  />
+
     <script
       src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
       integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
@@ -25,6 +28,10 @@
     <script
       src="js/gridding/gridding.js"
     ></script>
+
+    <script
+    src="js/L.Control.Range.js"
+  ></script>
 
 
   
@@ -372,12 +379,12 @@ const colors = [
 
      
 
-      L.contour(data, {
+      var contours= L.contour(data, {
         thresholds:100,
         style: (feature) => {
           return {
             color: getColor(feature.geometry.value, -29,10, colors),
-            opacity: 0.01,
+            opacity: 0.05,
             fillOpacity: 0.05,
           };
         },
@@ -399,6 +406,109 @@ const colors = [
       
 
       }
+
+
+
+      ///////////////Range control
+//fille opacity controle
+  var slider1 = L.control.range({
+    position: 'topleft',
+    min: 0,
+    max: 0.1,
+    value: 0.05,
+    step: 0.001,
+    orient: 'vertical',
+    iconClass: 'leaflet-range-icon',
+    icon: true
+});
+
+slider1.on('input change', function(e) {
+
+var year =parseFloat(e.value);
+
+contours.setStyle({ fillOpacity:e.value});
+
+ 
+});
+
+//opacity controle
+var slider2 = L.control.range({
+    label: 'test',
+    position: 'topleft',
+    min: 0,
+    max: 0.1,
+    value: 0.05,
+    step: 0.001,
+    orient: 'vertical',
+    iconClass: 'leaflet-range-icon',
+    icon: true
+});
+
+slider2.on('input change', function(e) {
+
+var year =parseFloat(e.value);
+
+contours.setStyle({ opacity:e.value});
+
+ 
+});
+
+
+
+
+
+function getStyle(y){
+//fillColor: getColor(y),
+{return {
+         opacity:getOpacity(y)}}
+  /*if (y >= 100) {return {fillColor: "#ff0000", fillOpacity: 10}}
+  if (y <= 10) {return {fillColor: "#ff0000", fillOpacity: 0}}
+  if (y>10 || y< 100) {return {fillColor: "#ff0000", fillOpacity: 1}}
+  else {return {fillOpacity: 0}}*/
+}
+
+
+
+function getOpacity(d){
+  if (d >= 50) {return { fillOpacity: 10}}
+  else {return { fillOpacity: 0}}
+
+}
+
+map.addControl(slider1);
+map.addControl(slider2);
+
+
+
+// Creating a legend
+
+function getColors(d){
+            return d > 1000 ? '#800026' :
+                    d > 500  ? '#BD0026' :
+                    d > 200  ? '#E31A1C' :
+                    d > 100  ? '#FC4E2A' :
+                    d > 50   ? '#FD8D3C' :
+                    d > 20   ? '#FEB24C' :
+                    d > 10   ? '#FED976' :
+                                '#FFEDA0';
+                    
+        }
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (mymap) {
+    var div = L.DomUtil.create('div', 'info-legend'), grades = [ 0, 10, 20, 50, 100, 200, 500, 1000], labels = [];
+    
+    // Loop through our density intervals and generate a label with a coloured square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML += '<i style="background:' + getColors(grades[i] + 1) + '"></i> ' + (grades[i] + grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    }
+
+    return div;
+};
+legend.addTo(map)
+
+
+
 
      
 
