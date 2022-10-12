@@ -131,6 +131,16 @@
    <script src="https://unpkg.com/georaster-layer-for-leaflet@0.4.1/georaster-layer-for-leaflet.js"></script>
    <script src="https://unpkg.com/georaster-layer-for-leaflet@0.4.1/georaster.browser.bundle.js"></script>
 
+
+   <link rel="stylesheet" href="css/legende.css"  />
+   <link  rel="stylesheet"  href= "css/L.Control.Range.css"  />
+
+   <script
+   src="/js/L.Control.Range.js"
+ ></script>
+
+
+
   
    
 
@@ -332,6 +342,72 @@ attribution: mbAttr
         layers: [baseLayer, heatmapLayer5  ]
       });
 
+var slider1;
+var slider2;
+function addcontrol_opacity(data){
+
+ slider1 = L.control.range({
+    position: 'topleft',
+    min: 0,
+    max: 0.1,
+    value: 0.05,
+    step: 0.001,
+    orient: 'vertical',
+    iconClass: 'leaflet-range-icon',
+    icon: true,
+    label:'fillOpacity',
+});
+
+slider1.on('input change', function(e) {
+
+var year =parseFloat(e.value);
+
+data.setStyle({ fillOpacity:e.value});
+
+ 
+});
+
+//opacity controle
+ slider2 = L.control.range({
+    label: 'Contours Opacity',
+    position: 'topleft',
+    min: 0,
+    max: 0.1,
+    value: 0.05,
+    step: 0.001,
+    orient: 'vertical',
+    iconClass: 'leaflet-range-icon',
+    icon: true
+});
+
+slider2.on('input change', function(e) {
+
+var year =parseFloat(e.value);
+
+data.setStyle({ opacity:e.value});
+
+
+
+ 
+});
+
+
+
+map.addControl(slider1);
+map.addControl(slider2);
+
+
+//map.removeControl(slider1);
+//map.removeControl(slider2);
+
+
+
+}
+
+
+
+
+
 
              ///show value on moussmove
 
@@ -498,39 +574,52 @@ console.log(display_val);
             lay.collapseTree(true).expandSelected(true);
         });
 
+addcontrol_opacity(heatmapLayer5);
+     
+
+        map.on("overlayadd", function(e) {
+          map.removeControl(slider1);
+         map.removeControl(slider2);
+
+          if(e.name==2){
+            addcontrol_opacity(heatmapLayer5);
+
+          }
+
+          if(e.name==3){
+            addcontrol_opacity(heatmapLayer2);
+
+          }
+          if(e.name==4){
+            addcontrol_opacity(heatmapLayer3);
+
+          }
+          if(e.name==5){
+            addcontrol_opacity(heatmapLayer4);
+
+          }
+       
+
+});
 
 
-  //////////////////
+   
+var drawnItems = new L.FeatureGroup();
+map.addLayer(drawnItems);
 
+map.on('draw:created', function (e) {
 
+    var type = e.layerType,
+        layer = e.layer;
 
-/*if(control._activeOverlayLayers.name=='Clouds2'){
+    if (type === 'rectangle') {
+        layer.on('mouseover', function() {
+            alert(layer.getLatLngs());    
+        });
+    }
 
-
-  console.log("okookokokokok:"+ control._activeOverlayLayers.name);
-}
-*/
-
-
-
-
-
-      // Creating a marker
-      /*
-      var marker=[]
-      for(let i=0; i<=datacor.length-3;i++){
-
-        marker[i] = new L.Marker([Latcor[i], Longcor[i]]);
-         // Adding popup to the marker
-         Cor[i]=Cor[i]-2.505;
-         marker[i].bindPopup( locName[i]+": "+ Cor[i]+ " m").openPopup();
-
-        marker[i].addTo(map);
-      
-
-      }
-
-      console.log(locName);*/
+    drawnItems.addLayer(layer);
+});
 
 
       var command = L.control({position: 'topright'});
@@ -666,11 +755,6 @@ document.getElementById("file-selector2").addEventListener("change", function(ev
 
           }
 
-
-            
-
-
-  
 
            lay.setOverlayTree(overlaysTree);
           
@@ -808,23 +892,10 @@ document.getElementById("file-selector2").addEventListener("change", function(ev
     var long= longb;
     var lat= latb;
 
-//console.log(longb);
 
-     //Loop through the markers array
-     for ( i = 0; i < 5; i++) {
-   // marker = new L.marker(latb[i], longb[i])
-            // .bindPopup(name[i])
-          //   .addTo(map);
-          console.log("test")
-}
 
   
 
-    //var group = L.featureGroup(markerArray).addTo(map);
-    //map.fitBounds(group.getBounds());
-    
-
-  ///atribute
 
   
 

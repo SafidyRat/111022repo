@@ -1,6 +1,6 @@
 L.Control.Range = L.Control.extend({
     options: {
-        label:'test',
+        label:'Control Opacity',
         position: 'topright',
         min: 0,
         max: 100,
@@ -14,6 +14,8 @@ L.Control.Range = L.Control.extend({
     
     onAdd: function(map) {
         var container = L.DomUtil.create('div', 'leaflet-range-control leaflet-bar '+ this.options.orient);
+     
+        container.style.background= "Azure";
       
         if (this.options.icon) {
           L.DomUtil.create('span', this.options.iconClass, container);
@@ -27,7 +29,11 @@ L.Control.Range = L.Control.extend({
         slider.value = this.options.value;
         slider.label = this.options.label;
 
-        container.innerHTML += slider.label;
+        container.append(slider.label);
+
+        
+
+        //container.innerHTML += slider.label;
 
         L.DomEvent.on(slider, 'mousedown mouseup click touchstart', L.DomEvent.stopPropagation);
 
@@ -53,9 +59,11 @@ L.Control.Range = L.Control.extend({
 
         this._slider = slider;
         this._container = container;
-
+       
         return this._container;
     },
+
+
 
     setValue: function(value) {
         this.options.value = value;

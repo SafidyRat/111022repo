@@ -112,8 +112,8 @@ y: ygrid,
 z: intensity,
 };
 
-console.log( data.z[20]);
-console.log( data.x[20]);
+//console.log( data.z[20]);
+//console.log( data.x[20]);
 /*
 let a = document.createElement('a');
 a.href = "data:application/octet-stream,"+encodeURIComponent(data.x);
